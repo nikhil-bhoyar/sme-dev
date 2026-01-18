@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Partner - SME Bank PDIP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* --- Existing CSS --- */
+        .header { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+        .header-content { display: flex; align-items: center; justify-content: space-between; }
+        .nav-menu { display: flex; list-style: none; align-items: center; }
+        .nav-link { color: #2c3e50; text-decoration: none; display: flex; align-items: center; transition: all 0.2s ease; }
+        .nav-link:hover { color: #031b37; background-color: #f0f4f7; }
+        .nav-link.active { background-color: #e3f2fd; color: #031b37; font-weight: 600; }
+        .user-menu { display: flex; align-items: center; }
+        .user-profile-container { position: relative; cursor: pointer; }
+        .user-profile-dropdown { position: absolute; top: calc(100% + 12px); right: 0; background: white; border: 1px solid #e8ecef; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 200px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s ease; z-index: 1000; }
+        .user-profile-container:hover .user-profile-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        .user-profile-dropdown-item { padding: 12px 16px; display: flex; align-items: center; gap: 12px; color: #2c3e50; text-decoration: none; transition: background-color 0.2s ease; }
+        .user-profile-dropdown-item:hover { background-color: #f0f4f7; }
+        .user-profile-dropdown-item.logout { color: #e74c3c; }
+        .user-profile-info-dropdown { padding: 12px 16px; border-bottom: 1px solid #f0f3f5; }
+        .nav-item.dropdown { position: relative; }
+        .nav-dropdown-menu { position: absolute; top: 100%; left: 0; margin-top: 8px; background: white; border: 1px solid #e8ecef; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 200px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s ease; z-index: 1000; padding: 8px 0; }
+        .nav-item.dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .nav-dropdown-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: #2c3e50; text-decoration: none; transition: background-color 0.2s ease; font-size: 14px; }
+        .nav-dropdown-item:hover { background-color: #f0f4f7; }
+        .nav-dropdown-item.active { background-color: #e3f2fd; color: #031b37; font-weight: 600; }
+        .main-content { padding: 24px; background-color: #f8f9fa; min-height: calc(100vh - 70px); }
+        .page-header { margin-bottom: 24px; }
+        .page-title { font-size: 28px; font-weight: 600; color: #2c3e50; margin: 0; }
+        .page-subtitle { font-size: 14px; color: #7f8c8d; margin: 4px 0 0 0; }
+        
+        /* --- New/Modified CSS for Tabs --- */
+        .custom-tabs .nav-link {
+            color: #7f8c8d;
+            font-weight: 500;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 12px 20px;
+        }
+        .custom-tabs .nav-link:hover {
+            color: #031b37;
+            background: transparent;
+            border-color: #e8ecef;
+        }
+        .custom-tabs .nav-link.active {
+            color: #031b37;
+            font-weight: 600;
+            background: transparent;
+            border-bottom: 2px solid #031b37; /* Active Line */
+        }
+        .tab-content {
+            padding-top: 20px;
+        }
+        .rac-rule-row {
+            border-bottom: 1px solid #f0f3f5;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .rac-rule-row:last-child {
+            border-bottom: none;
+        }
+        /* Custom Multi Select Style */
+        .dropdown-check-item {
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .dropdown-check-item:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <header class="header" style="border-bottom: 2px solid #e8ecef;">
+        <div class="header-content" style="padding: 14px 24px; max-width: 100%;">
+            <a href="dashboard.html" class="logo" style="min-width: 180px;">
+                <span style="font-weight:bold; font-size: 20px; color:#031b37;">SME Bank</span>
+            </a>
+            <nav style="flex: 1; display: flex;">
+                <ul class="nav-menu" style="gap: 8px; margin: 0; padding: 0;">
+                     <li class="nav-item dropdown">
+                        <a href="#" class="nav-link" style="padding: 10px 16px; font-size: 14px; font-weight: 500; border-radius: 6px;">
+                            <i class="fas fa-file-upload" style="margin-right: 8px; font-size: 13px;"></i> Submissions
+                            <i class="fas fa-chevron-down" style="margin-left: 6px; font-size: 10px;"></i>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a href="partner-submissions.html" class="nav-dropdown-item">Submissions</a>
+                            <a href="validation-results.html" class="nav-dropdown-item">Validations</a>
+                         </div>
+                    </li>
+                     <li class="nav-item">
+                        <a href="queries.html" class="nav-link" style="padding: 10px 16px; font-size: 14px; font-weight: 500; border-radius: 6px;">
+                            <i class="fas fa-question-circle" style="margin-right: 8px; font-size: 13px;"></i>Queries
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link" style="padding: 10px 16px; font-size: 14px; font-weight: 500; border-radius: 6px;">
+                            <i class="fas fa-balance-scale" style="margin-right: 8px; font-size: 13px;"></i> Exposures
+                            <i class="fas fa-chevron-down" style="margin-left: 6px; font-size: 10px;"></i>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a href="exposures.html" class="nav-dropdown-item">Exposures</a>
+                             <a href="reconciliation.html" class="nav-dropdown-item">Reconciliation</a>
+                        </div>
+                    </li>
+                     <li class="nav-item dropdown">
+                        <a href="#" class="nav-link" style="padding: 10px 16px; font-size: 14px; font-weight: 500; border-radius: 6px;">
+                            <i class="fas fa-chart-bar" style="margin-right: 8px; font-size: 13px;"></i>Reports & Data
+                            <i class="fas fa-chevron-down" style="margin-left: 6px; font-size: 10px;"></i>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a href="data-mart.html" class="nav-dropdown-item">Data Mart</a>
+                            <a href="reports.html" class="nav-dropdown-item">Reports</a>
+                            <a href="audit-trail.html" class="nav-dropdown-item">Audit Trail</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link" style="padding: 10px 16px; font-size: 14px; font-weight: 500; border-radius: 6px;">
+                            <i class="fas fa-cog" style="margin-right: 8px; font-size: 13px;"></i>Administration
+                            <i class="fas fa-chevron-down" style="margin-left: 6px; font-size: 10px;"></i>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                             <a href="manage-roles.html" class="nav-dropdown-item">Manage Roles</a>
+                            <a href="manage-users.html" class="nav-dropdown-item">Manage Users</a>
+                            <a href="masters.html" class="nav-dropdown-item">Masters</a>
+                            <a href="partners.html" class="nav-dropdown-item">Partners</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="user-menu" style="min-width: 120px; justify-content: flex-end; margin-right: 8px;">
+                <div class="user-profile-container">
+                    <div class="user-avatar" style="width: 38px; height: 38px; background: linear-gradient(135deg, #031b37 0%, #064a6b 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; box-shadow: 0 2px 4px rgba(3, 27, 55, 0.2);">SA</div>
+                    <div class="user-profile-dropdown">
+                        <div class="user-profile-info-dropdown">
+                            <div style="font-size: 14px; font-weight: 600; color: #2c3e50; line-height: 1.3;">Super Admin</div>
+                            <div style="font-size: 12px; color: #7f8c8d; line-height: 1.3;">System Administrator</div>
+                        </div>
+                        <a href="login.html" class="user-profile-dropdown-item logout">
+                            <i class="fas fa-sign-out-alt" style="font-size: 14px;"></i>
+                            <span style="font-size: 14px; font-weight: 500;">Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header" style="margin-bottom: 24px;">
+            <div>
+                <h1 class="page-title" style="margin-bottom: 4px;">Add Partner</h1>
+                <p class="page-subtitle" style="margin-bottom: 0;">Create a new partner bank in the system</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 24px; border: 1px solid #e8ecef; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+            <div class="card-header" style="padding: 20px 24px; border-bottom: 1px solid #f0f3f5; background-color: #fafbfc; border-radius: 8px 8px 0 0;">
+                <h5 style="margin: 0; font-size: 17px; font-weight: 600; color: #2c3e50;"><i class="fas fa-info-circle" style="margin-right: 8px; font-size: 15px; color: #7f8c8d;"></i>Basic Information</h5>
+            </div>
+            <div class="card-body" style="padding: 24px;">
+                <form>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Partner Code <span style="color: #e74c3c;">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter partner code (e.g., RB, ANB)" required style="font-size: 14px;">
+                            <small style="font-size: 12px; color: #7f8c8d; margin-top: 4px; display: block;">Unique identifier for the partner</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Partner Name <span style="color: #e74c3c;">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter partner name" required style="font-size: 14px;">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Partner Name (Arabic)</label>
+                            <input type="text" class="form-control" placeholder="أدخل اسم الشريك" dir="rtl" style="font-size: 14px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Status <span style="color: #e74c3c;">*</span></label>
+                            <select class="form-select" required style="font-size: 14px;">
+                                <option selected>Active</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 24px; border: 1px solid #e8ecef; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+            <div class="card-header" style="padding: 20px 24px; border-bottom: 1px solid #f0f3f5; background-color: #fafbfc; border-radius: 8px 8px 0 0;">
+                <h5 style="margin: 0; font-size: 17px; font-weight: 600; color: #2c3e50;"><i class="fas fa-address-book" style="margin-right: 8px; font-size: 15px; color: #7f8c8d;"></i>Contact Information</h5>
+            </div>
+            <div class="card-body" style="padding: 24px;">
+                <form>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Contact Person <span style="color: #e74c3c;">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter contact person name" required style="font-size: 14px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Email <span style="color: #e74c3c;">*</span></label>
+                            <input type="email" class="form-control" placeholder="Enter email address" required style="font-size: 14px;">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Phone Number <span style="color: #e74c3c;">*</span></label>
+                            <input type="tel" class="form-control" placeholder="+966 11 XXX XXXX" required style="font-size: 14px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Mobile Number</label>
+                            <input type="tel" class="form-control" placeholder="+966 5X XXX XXXX" style="font-size: 14px;">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Address</label>
+                            <textarea class="form-control" rows="2" placeholder="Enter complete address" style="font-size: 14px;"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 24px; border: 1px solid #e8ecef; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+            <div class="card-header" style="padding: 20px 24px; border-bottom: 1px solid #f0f3f5; background-color: #fafbfc; border-radius: 8px 8px 0 0;">
+                <h5 style="margin: 0; font-size: 17px; font-weight: 600; color: #2c3e50;"><i class="fas fa-file-contract" style="margin-right: 8px; font-size: 15px; color: #7f8c8d;"></i>Business RAC</h5>
+            </div>
+            <div class="card-body" style="padding: 24px;">
+                <form>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Select Program <span style="color: #e74c3c;">*</span></label>
+                            <select class="form-select" id="integrationType" required style="font-size: 14px;">
+                                <option value="portal" selected>Co-Financing</option>
+                                <option value="agency">Agency</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Select Product(s) <span style="color: #e74c3c;">*</span></label>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="productDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-align: left; background-color: white; border-color: #dee2e6; color: #212529; font-size: 14px;">
+                                    Select Products...
+                                </button>
+                                <ul class="dropdown-menu w-100" aria-labelledby="productDropdown">
+                                    
+                                    <div id="cofinancing-products">
+                                        <li class="dropdown-header">Co-Financing Products</li>
+                                        <li class="dropdown-check-item">
+                                            <div class="form-check">
+                                                <input class="form-check-input product-check" type="checkbox" value="working-capital" id="checkWC" checked>
+                                                <label class="form-check-label" for="checkWC">Working Capital</label>
+                                            </div>
+                                        </li>
+                                        <li class="dropdown-check-item">
+                                            <div class="form-check">
+                                                <input class="form-check-input product-check" type="checkbox" value="term-loan" id="checkTL" checked>
+                                                <label class="form-check-label" for="checkTL">Term Loan</label>
+                                            </div>
+                                        </li>
+                                        <li class="dropdown-check-item">
+                                            <div class="form-check">
+                                                <input class="form-check-input product-check" type="checkbox" value="invoice-finance" id="checkIF">
+                                                <label class="form-check-label" for="checkIF">Invoice Finance</label>
+                                            </div>
+                                        </li>
+                                    </div>
+
+                                    <div id="agency-products" style="display: none;">
+                                        <li class="dropdown-header">Agency Products</li>
+                                        <li class="dropdown-check-item">
+                                            <div class="form-check">
+                                                <input class="form-check-input product-check" type="checkbox" value="microloans" id="checkMicro">
+                                                <label class="form-check-label" for="checkMicro">Microloans</label>
+                                            </div>
+                                        </li>
+                                        <li class="dropdown-check-item">
+                                            <div class="form-check">
+                                                <input class="form-check-input product-check" type="checkbox" value="ecommerce" id="checkEcom">
+                                                <label class="form-check-label" for="checkEcom">Ecommerce Loan</label>
+                                            </div>
+                                        </li>
+                                        <li class="dropdown-check-item">
+                                            <div class="form-check">
+                                                <input class="form-check-input product-check" type="checkbox" value="revolving" id="checkRev">
+                                                <label class="form-check-label" for="checkRev">Revolving Limit</label>
+                                            </div>
+                                        </li>
+                                    </div>
+
+                                </ul>
+                            </div>
+                            <small style="font-size: 12px; color: #7f8c8d; margin-top: 4px; display: block;">Select multiple products to configure their RAC individually.</small>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs custom-tabs" id="racTabs" role="tablist" style="border-bottom: 1px solid #e8ecef;">
+                        <li class="nav-item" role="presentation" id="tab-li-wc">
+                            <button class="nav-link active" id="wc-tab" data-bs-toggle="tab" data-bs-target="#wc-pane" type="button" role="tab" aria-controls="wc-pane" aria-selected="true">Working Capital</button>
+                        </li>
+                        <li class="nav-item" role="presentation" id="tab-li-tl">
+                            <button class="nav-link" id="tl-tab" data-bs-toggle="tab" data-bs-target="#tl-pane" type="button" role="tab" aria-controls="tl-pane" aria-selected="false">Term Loan</button>
+                        </li>
+                        <li class="nav-item" role="presentation" id="tab-li-if" style="display:none;">
+                            <button class="nav-link" id="if-tab" data-bs-toggle="tab" data-bs-target="#if-pane" type="button" role="tab" aria-controls="if-pane" aria-selected="false">Invoice Finance</button>
+                        </li>
+
+                        <li class="nav-item" role="presentation" id="tab-li-micro" style="display:none;">
+                            <button class="nav-link" id="micro-tab" data-bs-toggle="tab" data-bs-target="#micro-pane" type="button" role="tab" aria-controls="micro-pane" aria-selected="false">Microloans</button>
+                        </li>
+                        <li class="nav-item" role="presentation" id="tab-li-ecom" style="display:none;">
+                            <button class="nav-link" id="ecom-tab" data-bs-toggle="tab" data-bs-target="#ecom-pane" type="button" role="tab" aria-controls="ecom-pane" aria-selected="false">Ecommerce Loan</button>
+                        </li>
+                        <li class="nav-item" role="presentation" id="tab-li-rev" style="display:none;">
+                            <button class="nav-link" id="rev-tab" data-bs-toggle="tab" data-bs-target="#rev-pane" type="button" role="tab" aria-controls="rev-pane" aria-selected="false">Revolving Limit</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="racTabContent">
+                        
+                        <div class="tab-pane fade show active" id="wc-pane" role="tabpanel" aria-labelledby="wc-tab">
+                            <div class="alert alert-light border mb-4" role="alert" style="font-size: 13px; background-color: #f8f9fa;">
+                                <i class="fas fa-cog me-2"></i>Configuring RAC Rules for: <strong>Working Capital</strong>
+                            </div>
+                            
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> 
+                                    <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R1</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Industry</label>
+                                    <select class="form-select" style="font-size: 14px;">
+                                        <option>Select Industry</option>
+                                        <option>Accommodation and food service activities</option>
+                                        <option>Administrative and support service activities</option>
+                                        <option>Agriculture Forestry and Fishing</option>
+                                        <option>Arts entertainment and recreation</option>
+                                        <option>ConstructionEducation</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label>
+                                    <br>
+                                    <div style="margin-top: 6px;">
+                                        <input type="radio" id="wc_r1_w" name="wc_r1_action" value="warning" checked>
+                                        <label for="wc_r1_w" style="margin-right: 15px;">Warning</label>
+                                        <input type="radio" id="wc_r1_b" name="wc_r1_action" value="block">
+                                        <label for="wc_r1_b">Block Record</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;"> &nbsp;</label>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> 
+                                    <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R2</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Borrower Type</label>
+                                    <select class="form-select" style="font-size: 14px;">
+                                        <option>Select Type</option>
+                                        <option>Micro</option>
+                                        <option>Small</option>
+                                        <option>Medium</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label>
+                                    <br>
+                                    <div style="margin-top: 6px;">
+                                        <input type="radio" id="wc_r2_w" name="wc_r2_action" value="warning">
+                                        <label for="wc_r2_w" style="margin-right: 15px;">Warning</label>
+                                        <input type="radio" id="wc_r2_b" name="wc_r2_action" value="block" checked>
+                                        <label for="wc_r2_b">Block Record</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;"> &nbsp;</label>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> 
+                                    <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R3</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Minimum Years in Business (Months)</label>
+                                    <input type="tel" class="form-control" value="24" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label>
+                                    <br>
+                                    <div style="margin-top: 6px;">
+                                        <input type="radio" id="wc_r3_w" name="wc_r3_action" value="warning" checked>
+                                        <label for="wc_r3_w" style="margin-right: 15px;">Warning</label>
+                                        <input type="radio" id="wc_r3_b" name="wc_r3_action" value="block">
+                                        <label for="wc_r3_b">Block Record</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;"> &nbsp;</label>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> 
+                                    <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R4</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Annual Profit Rates (Reducing Balance %)</label>
+                                    <input type="tel" class="form-control" value="12" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label>
+                                    <br>
+                                    <div style="margin-top: 6px;">
+                                        <input type="radio" id="wc_r4_w" name="wc_r4_action" value="warning" checked>
+                                        <label for="wc_r4_w" style="margin-right: 15px;">Warning</label>
+                                        <input type="radio" id="wc_r4_b" name="wc_r4_action" value="block">
+                                        <label for="wc_r4_b">Block Record</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;"> &nbsp;</label>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> 
+                                    <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R5</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Tenor (Months)</label>
+                                    <input type="tel" class="form-control" value="12" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label>
+                                    <br>
+                                    <div style="margin-top: 6px;">
+                                        <input type="radio" id="wc_r5_w" name="wc_r5_action" value="warning" checked>
+                                        <label for="wc_r5_w" style="margin-right: 15px;">Warning</label>
+                                        <input type="radio" id="wc_r5_b" name="wc_r5_action" value="block">
+                                        <label for="wc_r5_b">Block Record</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;"> &nbsp;</label>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="tl-pane" role="tabpanel" aria-labelledby="tl-tab">
+                            <div class="alert alert-light border mb-4" role="alert" style="font-size: 13px; background-color: #f8f9fa;">
+                                <i class="fas fa-cog me-2"></i>Configuring RAC Rules for: <strong>Term Loan</strong>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> 
+                                    <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R1</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Industry</label>
+                                    <select class="form-select" style="font-size: 14px;">
+                                        <option>Select Industry</option>
+                                        <option>Accommodation and food service activities</option>
+                                        <option>Administrative and support service activities</option>
+                                        <option>Agriculture Forestry and Fishing</option>
+                                        <option>Arts entertainment and recreation</option>
+                                        <option>ConstructionEducation</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="tl_r1" checked> Warning <input type="radio" name="tl_r1"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R2</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Borrower Type</label>
+                                    <select class="form-select" style="font-size: 14px;"><option>Micro</option><option>Small</option><option>Medium</option></select>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="tl_r2" checked> Warning <input type="radio" name="tl_r2"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R3</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Min Years in Business (Months)</label>
+                                    <input type="tel" class="form-control" value="36" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="tl_r3" checked> Warning <input type="radio" name="tl_r3"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R4</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Annual Profit Rates (%)</label>
+                                    <input type="tel" class="form-control" value="15" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="tl_r4" checked> Warning <input type="radio" name="tl_r4"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R5</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Tenor (Months)</label>
+                                    <input type="tel" class="form-control" value="60" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="tl_r5" checked> Warning <input type="radio" name="tl_r5"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="if-pane" role="tabpanel" aria-labelledby="if-tab">
+                            <div class="alert alert-light border mb-4" role="alert" style="font-size: 13px; background-color: #f8f9fa;">
+                                <i class="fas fa-cog me-2"></i>Configuring RAC Rules for: <strong>Invoice Finance</strong>
+                            </div>
+                            <p class="text-center p-4 text-muted">Invoice Finance configuration loaded...</p>
+                        </div>
+
+                        <div class="tab-pane fade" id="micro-pane" role="tabpanel" aria-labelledby="micro-tab">
+                            <div class="alert alert-light border mb-4" role="alert" style="font-size: 13px; background-color: #f8f9fa;">
+                                <i class="fas fa-cog me-2"></i>Configuring RAC Rules for: <strong>Microloans</strong>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> 
+                                    <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R1</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Industry</label>
+                                    <select class="form-select" style="font-size: 14px;">
+                                        <option>Select Industry</option>
+                                        <option>Accommodation and food service activities</option>
+                                        <option>Administrative and support service activities</option>
+                                        <option>Agriculture Forestry and Fishing</option>
+                                        <option>Arts entertainment and recreation</option>
+                                        <option>ConstructionEducation</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="ml_r1" checked> Warning <input type="radio" name="ml_r1"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R2</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Borrower Type</label>
+                                    <select class="form-select" style="font-size: 14px;"><option>Micro</option><option>Small</option><option>Medium</option></select>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="ml_r2" checked> Warning <input type="radio" name="ml_r2"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R3</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Min Years in Business (Months)</label>
+                                    <input type="tel" class="form-control" value="12" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="ml_r3" checked> Warning <input type="radio" name="ml_r3"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R4</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Annual Profit Rates (%)</label>
+                                    <input type="tel" class="form-control" value="10" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="ml_r4" checked> Warning <input type="radio" name="ml_r4"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R5</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Tenor (Months)</label>
+                                    <input type="tel" class="form-control" value="24" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="ml_r5" checked> Warning <input type="radio" name="ml_r5"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="ecom-pane" role="tabpanel" aria-labelledby="ecom-tab">
+                            <div class="alert alert-light border mb-4" role="alert" style="font-size: 13px; background-color: #f8f9fa;">
+                                <i class="fas fa-cog me-2"></i>Configuring RAC Rules for: <strong>Ecommerce Loan</strong>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> 
+                                    <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R1</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Industry</label>
+                                    <select class="form-select" style="font-size: 14px;">
+                                        <option>Select Industry</option>
+                                        <option>Accommodation and food service activities</option>
+                                        <option>Administrative and support service activities</option>
+                                        <option>Agriculture Forestry and Fishing</option>
+                                        <option>Arts entertainment and recreation</option>
+                                        <option>ConstructionEducation</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="el_r1" checked> Warning <input type="radio" name="el_r1"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R2</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Borrower Type</label>
+                                    <select class="form-select" style="font-size: 14px;"><option>Micro</option><option>Small</option><option>Medium</option></select>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="el_r2" checked> Warning <input type="radio" name="el_r2"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R3</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Min Years in Business (Months)</label>
+                                    <input type="tel" class="form-control" value="6" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="el_r3" checked> Warning <input type="radio" name="el_r3"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R4</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Annual Profit Rates (%)</label>
+                                    <input type="tel" class="form-control" value="8" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="el_r4" checked> Warning <input type="radio" name="el_r4"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                            <div class="row mb-3 rac-rule-row">
+                                <div class="col-md-1" style="margin-top: 20px;"> <span style="float: left; height: 40px; width: 40px; border-radius: 100%; border:1px solid gray; text-align: center; padding: 5px 0px;"> R5</span></div>
+                                <div class="col-md-3">
+                                    <label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Tenor (Months)</label>
+                                    <input type="tel" class="form-control" value="12" style="font-size: 14px;">
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4"><label class="form-label" style="font-size: 13px; font-weight: 500; color: #2c3e50; margin-bottom: 8px;">Warning / Block</label><br><div style="margin-top: 6px;"><input type="radio" name="el_r5" checked> Warning <input type="radio" name="el_r5"> Block Record</div></div>
+                                <div class="col-md-1"><label class="form-label" style="font-size: 13px;">&nbsp;</label><div style="display:flex;gap:4px;"><button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></div></div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="rev-pane" role="tabpanel" aria-labelledby="rev-tab">
+                            <div class="alert alert-light border mb-4" role="alert" style="font-size: 13px; background-color: #f8f9fa;">
+                                <i class="fas fa-cog me-2"></i>Configuring RAC Rules for: <strong>Revolving Limit</strong>
+                            </div>
+                            <p class="text-center p-4 text-muted">Revolving Limit configuration loaded...</p>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-bottom: 32px;">
+            <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 500; border-radius: 6px; box-shadow: 0 2px 4px rgba(3, 27, 55, 0.2);"><i class="fas fa-save" style="margin-right: 8px; font-size: 13px;"></i>Create Partner</button>
+            <button type="button" class="btn btn-outline" onclick="window.location.href='partners.html';" style="padding: 10px 24px; font-weight: 500; border-radius: 6px;">Cancel</button>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Logic to Switch Product Lists based on Program Selection
+            const programSelect = document.getElementById('integrationType');
+            const cofinancingProducts = document.getElementById('cofinancing-products');
+            const agencyProducts = document.getElementById('agency-products');
+
+            programSelect.addEventListener('change', function() {
+                // Hide all tabs first
+                document.querySelectorAll('.nav-item').forEach(item => item.style.display = 'none');
+                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
+
+                if(this.value === 'portal') { // Co-Financing
+                    cofinancingProducts.style.display = 'block';
+                    agencyProducts.style.display = 'none';
+                    
+                    // Reset Agency Checks
+                    agencyProducts.querySelectorAll('input').forEach(input => {
+                        input.checked = false;
+                        input.dispatchEvent(new Event('change')); // Trigger hide logic
+                    });
+                    
+                    // Check defaults for Co-Financing
+                    document.getElementById('checkWC').checked = true;
+                    document.getElementById('checkWC').dispatchEvent(new Event('change'));
+
+                } else if (this.value === 'agency') { // Agency
+                    cofinancingProducts.style.display = 'none';
+                    agencyProducts.style.display = 'block';
+
+                    // Reset Co-Financing Checks
+                    cofinancingProducts.querySelectorAll('input').forEach(input => {
+                        input.checked = false;
+                        input.dispatchEvent(new Event('change')); // Trigger hide logic
+                    });
+
+                    // Check default for Agency
+                    document.getElementById('checkMicro').checked = true;
+                    document.getElementById('checkMicro').dispatchEvent(new Event('change'));
+                }
+            });
+
+            // 2. Logic to Handle Dynamic Tabs based on Product Selection
+            const productChecks = document.querySelectorAll('.product-check');
+            
+            productChecks.forEach(check => {
+                check.addEventListener('change', function() {
+                    const productVal = this.value;
+                    let tabId = '';
+                    
+                    // Map checkboxes to Tabs
+                    if(productVal === 'working-capital') tabId = 'tab-li-wc';
+                    if(productVal === 'term-loan') tabId = 'tab-li-tl';
+                    if(productVal === 'invoice-finance') tabId = 'tab-li-if';
+                    if(productVal === 'microloans') tabId = 'tab-li-micro';
+                    if(productVal === 'ecommerce') tabId = 'tab-li-ecom';
+                    if(productVal === 'revolving') tabId = 'tab-li-rev';
+
+                    const tabElement = document.getElementById(tabId);
+                    
+                    if(this.checked) {
+                        tabElement.style.display = 'block';
+                        // If it's the only one or first one showing, trigger click to activate
+                        const visibleTabs = Array.from(document.querySelectorAll('.nav-item')).filter(t => t.style.display !== 'none');
+                        // Simple logic: if the currently active tab is hidden, switch to this one
+                        if(!document.querySelector('.nav-link.active') || document.querySelector('.nav-link.active').parentElement.style.display === 'none') {
+                             tabElement.querySelector('button').click();
+                        }
+                    } else {
+                        if(tabElement) {
+                            tabElement.style.display = 'none';
+                            // If we hid the active tab, switch to the first available visible tab
+                            if (tabElement.querySelector('button').classList.contains('active')) {
+                                const firstVisible = Array.from(document.querySelectorAll('.nav-item')).find(t => t.style.display !== 'none');
+                                if (firstVisible) {
+                                    firstVisible.querySelector('button').click();
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
